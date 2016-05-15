@@ -9,10 +9,10 @@ class PgDbTypes {
 	static def prepareAttribute(attr){
 		switch(attr) {
 			case Date:
-				return new java.sql.Date(attr.getTime())
+				return new java.sql.Timestamp(attr.getTime())
 				
 			case Calendar:
-				return new java.sql.Date(attr.getTime())
+				return new java.sql.Timestamp(attr.getTime().getTime())
 				
 			case LocalDate:
 				Date date = Date.from(attr.atStartOfDay(ZoneId.systemDefault()).toInstant())
