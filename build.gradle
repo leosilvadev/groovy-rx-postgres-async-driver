@@ -36,3 +36,5 @@ jar {
 		'Implementation-Version': version
 	}
 }
+
+cobertura.coverageFormats = ['html', 'xml']
