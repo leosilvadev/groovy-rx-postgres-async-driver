@@ -24,9 +24,11 @@ test {
 	}
 }
 
-task integrationTest(type: Test) {
-	filter {
-		includeTestsMatching "*IntegrationSpec"
+if ( !System.env.CI ) {
+	task integrationTest(type: Test) {
+		filter {
+			includeTestsMatching "*IntegrationSpec"
+		}
 	}
 }
 
