@@ -8,6 +8,7 @@ class Fixture {
 		   type CHARACTER VARYING(50) NOT NULL, 
 		   description TEXT NOT NULL, 
 		   details TEXT, 
+		   registration TIMESTAMP NOT NULL,
 		   CONSTRAINT "pk-logs" PRIMARY KEY (id)
 		)
 	'''

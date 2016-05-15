@@ -37,4 +37,6 @@ jar {
 	}
 }
 
-cobertura.coverageFormats = ['html', 'xml']
+cobertura {
+	coverageFormats = ['html', 'xml']
+}

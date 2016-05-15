@@ -51,7 +51,9 @@ class PgDb {
 	
 	Observable execute(String namedSql, Map mapParams = [:]) {
 		Tuple2<String, List> tuple = PgDbParams.namedParameters(namedSql, mapParams)
-		db.querySet(tuple.first, tuple.second?.toArray())
+		def sql = tuple.first
+		def params = PgDbTypes.prepareAttributes(tuple.second ?: [])
+		db.querySet(sql, params.toArray())
 	}
 	
 	String sqlReturnId(String sql, Boolean mustReturnId){

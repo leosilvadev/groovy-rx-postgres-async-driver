@@ -6,6 +6,7 @@ import groovy.transform.TypeChecked
 import java.sql.Time
 import java.sql.Timestamp
 import java.time.LocalDate
+import java.time.LocalDateTime;
 
 import rx.functions.Func1
 
@@ -53,7 +54,7 @@ class PgDbResultMapper {
 		} as Func1
 	}
 	
-	private static def mapType(String column, Class type, Row row){
+	static def mapType(String column, Class type, Row row){
 		switch(type) {
 			case BigDecimal: return row.getBigDecimal(column)
 			case BigInteger: return row.getBigInteger(column)
@@ -67,6 +68,7 @@ class PgDbResultMapper {
 			case Double: return row.getDouble(column)
 			case Integer: return row.getInt(column)
 			case LocalDate: return localDateFrom(column, row)
+			case LocalDateTime: return localDateTimeFrom(column, row)
 			case Long: return row.getLong(column)
 			case Short: return row.getShort(column)	
 			case String: return row.getString(column)
@@ -87,6 +89,11 @@ class PgDbResultMapper {
 	static LocalDate localDateFrom(String column, Row row) {
 		java.sql.Date date = row.getDate(column)
 		date.toLocalDate()
+	}
+	
+	static LocalDateTime localDateTimeFrom(String column, Row row) {
+		java.sql.Timestamp date = row.getTimestamp(column)
+		date.toLocalDateTime()
 	}
 
 }

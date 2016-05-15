@@ -1,5 +1,7 @@
 package com.github.leosilvadev.groovypgasync
 
+import java.time.LocalDate
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit
 
 import spock.lang.Shared
@@ -28,10 +30,10 @@ class PgDbIntegrationSpec extends Specification {
 	def "Should insert a new Log"(){
 		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
-			def sql = 'INSERT INTO Logs (type, details, description) VALUES(:type, :details, :description)'
+			def sql = 'INSERT INTO Logs (type, details, description, registration) VALUES (:type, :details, :description, :registration)'
 
 		and:
-			def params = [type:'DEBUG', details:'any details', description:'any description']
+			def params = [type:'DEBUG', details:'any details', description:'any description', registration:new Date()]
 			
 		when:
 			def obs = db.insert(sql, params)
@@ -46,10 +48,10 @@ class PgDbIntegrationSpec extends Specification {
 	def "Should insert a new Log again"(){
 		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
-			def sql = 'INSERT INTO Logs (type, details, description) VALUES(:type, :details, :description)'
+			def sql = 'INSERT INTO Logs (type, details, description, registration) VALUES (:type, :details, :description, :registration)'
 		
 		and:
-			def params = [type:'DEBUG', details:'any details 2', description:'any description 2']
+			def params = [type:'DEBUG', details:'any details 2', description:'any description 2', registration:LocalDateTime.now()]
 			
 		when:
 			def obs = db.insert(sql, params)

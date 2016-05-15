@@ -3,6 +3,7 @@ package com.github.leosilvadev.groovypgasync
 import spock.lang.Specification
 
 import java.time.LocalDate
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import com.github.pgasync.Row
@@ -213,6 +214,28 @@ class PgDbResultMapperUnitSpec extends Specification {
 			result == localDate
 	}
 	
+	def "Should map a LocalDateTime value"(){
+		def fake = new java.sql.Timestamp(new Date().getTime())
+		def localDateTime = fake.toLocalDateTime()
+		given:
+			def type = LocalDateTime
+			
+		and:
+			def column = "column"
+			
+		and:
+			Row row = Mock(Row)
+			
+		when:
+			def result = PgDbResultMapper.mapType(column, type, row)
+			
+		then:
+			1 * row.getTimestamp(column) >> fake
+			
+		and:
+			result == localDateTime
+	}
+	
 	def "Should map a Long value"(){
 		given:
 			def type = Long
@@ -313,6 +336,25 @@ class PgDbResultMapperUnitSpec extends Specification {
 			
 		and:
 			result == fake
+	}
+	
+	
+	def "Should not map an unknown value"(){
+		def fake = new java.sql.Timestamp(new Date().getTime())
+		given:
+			def type = Object
+			
+		and:
+			def column = "column"
+			
+		and:
+			Row row = Mock(Row)
+			
+		when:
+			def result = PgDbResultMapper.mapType(column, type, row)
+			
+		then:
+			thrown(IllegalArgumentException)
 	}
 
 }
