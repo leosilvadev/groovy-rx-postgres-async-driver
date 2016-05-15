@@ -24,6 +24,12 @@ test {
 	}
 }
 
+integrationTest {
+	filter {
+		includeTestsMatching "*IntegrationSpec"
+	}
+}
+
 jar {
 	manifest {
 		attributes 'Implementation-Title': 'groovy-postgres-async-driver',
