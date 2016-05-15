@@ -24,7 +24,7 @@ test {
 	}
 }
 
-integrationTest {
+task integrationTest(type: Test) {
 	filter {
 		includeTestsMatching "*IntegrationSpec"
 	}
