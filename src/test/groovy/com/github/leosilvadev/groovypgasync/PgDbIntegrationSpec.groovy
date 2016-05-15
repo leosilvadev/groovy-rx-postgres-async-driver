@@ -38,6 +38,7 @@ class PgDbIntegrationSpec extends Specification {
 		def vars = new BlockingVariables(1, TimeUnit.SECONDS)
 		given:
 			def sql = 'INSERT INTO Logs (type, details, description) VALUES(:type, :details, :description)'
+
 		and:
 			def params = [type:'DEBUG', details:'any details', description:'any description']
 			
@@ -55,6 +56,7 @@ class PgDbIntegrationSpec extends Specification {
 		def vars = new BlockingVariables(1, TimeUnit.SECONDS)
 		given:
 			def sql = 'INSERT INTO Logs (type, details, description) VALUES(:type, :details, :description)'
+		
 		and:
 			def params = [type:'DEBUG', details:'any details 2', description:'any description 2']
 			
