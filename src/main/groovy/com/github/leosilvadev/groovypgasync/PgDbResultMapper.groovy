@@ -5,6 +5,7 @@ import groovy.transform.TypeChecked
 
 import java.sql.Time
 import java.sql.Timestamp
+import java.time.LocalDate
 
 import rx.functions.Func1
 
@@ -59,16 +60,33 @@ class PgDbResultMapper {
 			case Boolean: return row.getBoolean(column)
 			case Byte: return row.getByte(column)
 			case Character: return row.getChar(column)
-			case Date: return row.getDate(column)
+			case Calendar: return calendarFrom(column, row)
+			case Time: return row.getTime(column)
+			case Timestamp: return row.getTimestamp(column)
+			case Date: return dateFrom(column, row)
 			case Double: return row.getDouble(column)
 			case Integer: return row.getInt(column)
+			case LocalDate: return localDateFrom(column, row)
 			case Long: return row.getLong(column)
 			case Short: return row.getShort(column)	
 			case String: return row.getString(column)
-			case Time: return row.getTime(column)
-			case Timestamp: return row.getTimestamp(column)
 			default: throw new IllegalArgumentException('Unknown type')
 		}
+	}
+	
+	static Date dateFrom(String column, Row row) {
+		java.sql.Date date = row.getDate(column)
+		new Date(date.time)
+	}
+	
+	static Calendar calendarFrom(String column, Row row) {
+		java.sql.Date date = row.getDate(column)
+		date.toCalendar()
+	}
+	
+	static LocalDate localDateFrom(String column, Row row) {
+		java.sql.Date date = row.getDate(column)
+		date.toLocalDate()
 	}
 
 }

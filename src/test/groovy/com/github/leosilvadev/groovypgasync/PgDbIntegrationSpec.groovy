@@ -19,12 +19,8 @@ class PgDbIntegrationSpec extends Specification {
 		def conds = new AsyncConditions()
 		db = new PgDb()
 		db.execute(Fixture.CREATE_LOGS_TABLE)
-			.onErrorReturn({ println it })
 			.flatMap({ db.delete(Fixture.DELETE_ALL_LOGS) })
-			.subscribe({ 
-				println 'Done'
-				conds.evaluate({})
-			})
+			.subscribe({ conds.evaluate({})})
 			
 		conds.await(5.0)
 	}
@@ -89,9 +85,7 @@ class PgDbIntegrationSpec extends Specification {
 			def obs = db.find(sql, [id:Long, type:String, description:String, details:String])
 			
 		and:
-			obs
-			.onErrorReturn({ println it })
-			.subscribe({ vars.logs = it })
+			obs.subscribe({ vars.logs = it })
 			
 		then:
 			vars.logs.size() == 2
