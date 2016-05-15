@@ -1,5 +1,10 @@
 package com.github.leosilvadev.groovypgasync
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeChecked
+
+@CompileStatic
+@TypeChecked
 class PgDbUtils {
 	
 	static Map defaultConfig(){

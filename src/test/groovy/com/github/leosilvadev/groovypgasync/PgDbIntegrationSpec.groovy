@@ -1,7 +1,5 @@
 package com.github.leosilvadev.groovypgasync
 
-import static com.github.leosilvadev.groovypgasync.PgDbType.*
-
 import java.util.concurrent.TimeUnit
 
 import spock.lang.Shared
@@ -86,12 +84,12 @@ class PgDbIntegrationSpec extends Specification {
 	}
 	
 	def "Should find all Logs"(){
-		def vars = new BlockingVariables(1, TimeUnit.SECONDS)
+		def vars = new BlockingVariables(100, TimeUnit.SECONDS)
 		given:
 			def sql = 'SELECT * FROM Logs ORDER BY id'
 			
 		when:
-			def obs = db.find(sql, [id:LONG, type:STRING, description:STRING, details:STRING])
+			def obs = db.find(sql, [id:Long, type:String, description:String, details:String])
 			
 		and:
 			obs
@@ -115,7 +113,7 @@ class PgDbIntegrationSpec extends Specification {
 			def sql = 'SELECT * FROM Logs WHERE description = :description'
 			
 		when:
-			def obs = db.findOne(sql, [id:LONG, type:STRING, description:STRING, details:STRING], [description:'any description 2'])
+			def obs = db.findOne(sql, [id:Long, type:String, description:String, details:String], [description:'any description 2'])
 			
 		and:
 			obs.subscribe({ vars.log = it })
@@ -134,7 +132,7 @@ class PgDbIntegrationSpec extends Specification {
 			def sql = 'SELECT * FROM Logs WHERE type = :type'
 			
 		when:
-			def obs = db.findOne(sql, [id:LONG, type:STRING, description:STRING, details:STRING], [type:'DEBUG'])
+			def obs = db.findOne(sql, [id:Long, type:String, description:String, details:String], [type:'DEBUG'])
 			
 		and:
 			obs.onErrorReturn({ vars.error = it }).subscribe()

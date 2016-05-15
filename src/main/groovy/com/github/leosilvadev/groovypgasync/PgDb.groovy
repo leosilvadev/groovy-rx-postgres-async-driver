@@ -1,24 +1,27 @@
 package com.github.leosilvadev.groovypgasync
 
-import static com.github.leosilvadev.groovypgasync.PgDbType.*
+import groovy.transform.CompileStatic
+import groovy.transform.TypeChecked
 import rx.Observable
 
 import com.github.pgasync.ConnectionPoolBuilder
 import com.github.pgasync.Db
 import com.github.pgasync.impl.PgResultSet
 
+@CompileStatic
+@TypeChecked
 class PgDb {
 
 	final Db db
 
 	PgDb(Map config = PgDbUtils.defaultConfig()){
 		db = new ConnectionPoolBuilder()
-			.hostname(config.hostname)
-			.port(config.port)
-			.database(config.database)
-			.username(config.username)
-			.password(config.password)
-			.poolSize(config.poolSize)
+			.hostname(config.hostname as String)
+			.port(config.port as Integer)
+			.database(config.database as String)
+			.username(config.username as String)
+			.password(config.password as String)
+			.poolSize(config.poolSize as Integer)
 			.build()
 	}
 
@@ -39,16 +42,16 @@ class PgDb {
 	}
 	
 	Observable update(String namedSql, Map mapParams = [:]) {
-		execute(namedSql, mapParams).map({ it.updatedRows })
+		execute(namedSql, mapParams).map({ PgResultSet rs -> rs.updatedRows() })
 	}
-		
+	
 	Observable delete(String namedSql, Map mapParams = [:]) {
-		execute(namedSql, mapParams).map({ it.updatedRows })
+		execute(namedSql, mapParams).map({ PgResultSet rs -> rs.updatedRows() })
 	}
 	
 	Observable execute(String namedSql, Map mapParams = [:]) {
-		def (sql, params) = PgDbParams.namedParameters(namedSql, mapParams)
-		db.querySet(sql, *(params))
+		Tuple2<String, List> tuple = PgDbParams.namedParameters(namedSql, mapParams)
+		db.querySet(tuple.first, tuple.second?.toArray())
 	}
 	
 	String sqlReturnId(String sql, Boolean mustReturnId){
