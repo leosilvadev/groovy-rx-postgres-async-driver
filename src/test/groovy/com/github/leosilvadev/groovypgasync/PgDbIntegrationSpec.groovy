@@ -17,23 +17,20 @@ class PgDbIntegrationSpec extends Specification {
 	
 	def setupSpec(){
 		def conds = new AsyncConditions()
-		db = new PgDb([
-			hostname: "localhost",
-			port: 5432,
-			database: "glogger-test",
-			username: "dev",
-			password: "dev",
-			poolSize: 20
-		])
+		db = new PgDb()
 		db.execute(Fixture.CREATE_LOGS_TABLE)
+			.onErrorReturn({ println it })
 			.flatMap({ db.delete(Fixture.DELETE_ALL_LOGS) })
-			.subscribe({ conds.evaluate({}) })
+			.subscribe({ 
+				println 'Done'
+				conds.evaluate({})
+			})
 			
-		conds.await()
+		conds.await(5.0)
 	}
 	
 	def "Should insert a new Log"(){
-		def vars = new BlockingVariables(1, TimeUnit.SECONDS)
+		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
 			def sql = 'INSERT INTO Logs (type, details, description) VALUES(:type, :details, :description)'
 
@@ -51,7 +48,7 @@ class PgDbIntegrationSpec extends Specification {
 	}
 	
 	def "Should insert a new Log again"(){
-		def vars = new BlockingVariables(1, TimeUnit.SECONDS)
+		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
 			def sql = 'INSERT INTO Logs (type, details, description) VALUES(:type, :details, :description)'
 		
@@ -69,7 +66,7 @@ class PgDbIntegrationSpec extends Specification {
 	}
 	
 	def "Should update a Log"(){
-		def vars = new BlockingVariables(1, TimeUnit.SECONDS)
+		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
 			def sql = 'UPDATE Logs SET details = :details WHERE description LIKE :description'
 		
@@ -108,7 +105,7 @@ class PgDbIntegrationSpec extends Specification {
 	}
 	
 	def "Should find one Log"(){
-		def vars = new BlockingVariables(1, TimeUnit.SECONDS)
+		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
 			def sql = 'SELECT * FROM Logs WHERE description = :description'
 			
@@ -127,7 +124,7 @@ class PgDbIntegrationSpec extends Specification {
 	}
 	
 	def "Should not find one Log when the query returns many"(){
-		def vars = new BlockingVariables(1, TimeUnit.SECONDS)
+		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
 			def sql = 'SELECT * FROM Logs WHERE type = :type'
 			
