@@ -2,7 +2,7 @@ package com.github.leosilvadev.groovypgasync
 
 import spock.lang.Specification
 
-class PgDbParamsSpec extends Specification {
+class PgDbParamsUnitSpec extends Specification {
 	
 	def "Should handle named parameters"(){
 		given:

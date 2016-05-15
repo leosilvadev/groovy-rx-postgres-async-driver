@@ -20,7 +20,7 @@ dependencies {
 
 test {
 	filter {
-		includeTestsMatching "*Spec"
+		includeTestsMatching "*UnitSpec"
 	}
 }
 
