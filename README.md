@@ -18,6 +18,8 @@ def db = new PgDb([
 ])
 ```
 
+#### All the following methods return an rxjava Observable
+
 ### Insert
 ```groovy
 def sql = 'INSERT INTO Users (login, password) VALUES (:login, :password)'
