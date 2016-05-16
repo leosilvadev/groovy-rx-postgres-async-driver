@@ -55,7 +55,7 @@ artifacts { archives javadocJar, sourcesJar }
 signing { sign configurations.archives }
 
 username = ossrhUsername ?: System.env.ossrhUsername
-ossrhPassword = ossrhPassword ?: ?: System.env.ossrhPassword
+ossrhPassword = ossrhPassword ?: System.env.ossrhPassword
 
 uploadArchives {
 	repositories {
