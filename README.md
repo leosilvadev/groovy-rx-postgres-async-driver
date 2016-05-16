@@ -10,7 +10,7 @@ Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">pos
 - Transactions
 - Tests
 - Any Clue for paging
-- Anything you find useful :)
+- Anything you think is useful :)
 
 ### Connecting
 ```groovy
