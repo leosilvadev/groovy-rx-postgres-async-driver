@@ -65,5 +65,5 @@ db.findOne(sql, template, params).subscribe({ user -> println user })
 ### Execute
 ```groovy
 def sql = 'DROP TABLE Users'
-db.findOne(sql).subscribe({ result -> println result })
+db.execute(sql).subscribe({ result -> println result })
 ```
