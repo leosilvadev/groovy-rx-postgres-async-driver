@@ -11,6 +11,7 @@ Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">pos
 - Tests
 - Any Clue for paging
 - Anything you think is useful :)
+- Jsonb support
 
 ### Connecting
 ```groovy
@@ -65,5 +66,5 @@ db.findOne(sql, template, params).subscribe({ user -> println user })
 ### Execute
 ```groovy
 def sql = 'DROP TABLE Users'
-db.findOne(sql).subscribe({ result -> println result })
+db.execute(sql).subscribe({ result -> println result })
 ```
