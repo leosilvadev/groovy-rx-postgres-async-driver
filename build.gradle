@@ -28,6 +28,7 @@ task integrationTest(type: Test) {
 	filter {
 		includeTestsMatching "*IntegrationSpec"
 	}
+	dependsOn test
 }
 
 jar {
@@ -39,4 +40,8 @@ jar {
 
 cobertura {
 	coverageFormats = ['html', 'xml']
+}
+
+tasks.check {
+	dependsOn integrationTest
 }
