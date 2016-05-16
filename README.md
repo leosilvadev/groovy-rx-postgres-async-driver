@@ -2,9 +2,15 @@
 
 Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">postgres-async-driver<a>, adding utils methods and clue, based only on the driver's rx methods
 
+###### But why?
+- Execute queries with named parameters
+- Use Date types as you want: java.util.Date, Calendar, LocalDate, LocalDateTime
+
 ## TODO
 - Transactions
 - Tests
+- Any Clue for paging
+- Anything you find useful :)
 
 ### Connecting
 ```groovy
@@ -22,8 +28,8 @@ def db = new PgDb([
 
 ### Insert
 ```groovy
-def sql = 'INSERT INTO Users (login, password) VALUES (:login, :password)'
-def params = [login:'any', password:'any']
+def sql = 'INSERT INTO Users (login, password, dateField, timestampField) VALUES (:login, :password, :date, :timestamp)'
+def params = [login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now()]
 db.insert(sql, params).subscribe({ id -> println id })
 ```
 
