@@ -54,40 +54,39 @@ artifacts { archives javadocJar, sourcesJar }
 
 signing { sign configurations.archives }
 
-def username = ossrhUsername ?: System.env.ossrhUsername
-def password = ossrhPassword ?: System.env.ossrhPassword
-
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-				authentication(userName: username, password: password)
-			}
-
-			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-				authentication(userName: username, password: password)
-			}
-
-			pom.project {
-				name 'Groovy Postgres Async Driver'
-				packaging 'jar'
-				description 'Groovy wrapper for postgres-async-driver, adding utils methods and clue.'
-				url 'https://github.com/leosilvadev/groovy-rx-postgres-async-driver'
-
-				licenses {
-					license {
-						name 'The Apache License, Version 2.0'
-						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-					}
+if ( !System.env.CI ) {
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+	
+				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+					authentication(userName: ossrhUsername, password: ossrhPassword)
 				}
-
-				developers {
-					developer {
-						id 'leosilvadev'
-						name 'Leonardo Silva'
-						email 'leosilvadev@gmail.com'
+	
+				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+					authentication(userName: ossrhUsername, password: ossrhPassword)
+				}
+	
+				pom.project {
+					name 'Groovy Postgres Async Driver'
+					packaging 'jar'
+					description 'Groovy wrapper for postgres-async-driver, adding utils methods and clue.'
+					url 'https://github.com/leosilvadev/groovy-rx-postgres-async-driver'
+	
+					licenses {
+						license {
+							name 'The Apache License, Version 2.0'
+							url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						}
+					}
+	
+					developers {
+						developer {
+							id 'leosilvadev'
+							name 'Leonardo Silva'
+							email 'leosilvadev@gmail.com'
+						}
 					}
 				}
 			}
