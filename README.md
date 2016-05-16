@@ -13,6 +13,36 @@ Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">pos
 - Anything you think is useful :)
 - Jsonb support
 
+## Usage
+
+#### Gradle
+```groovy
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+	compile 'com.github.leosilvadev:groovy-postgres-async-driver:0.0.3-SNAPSHOT'
+}
+```
+
+#### Maven
+```xml
+<repository>
+   <id>oss.sonatype.org.snapshot</id>
+   <name>Oss Sonatype Snapshot</name>
+   <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+</repository>
+
+<dependency>
+  <groupId>com.github.leosilvadev</groupId>
+  <artifactId>groovy-postgres-async-driver</artifactId>
+  <version>0.0.3-SNAPSHOT</version>
+</dependency>
+```
+
 ### Connecting
 ```groovy
 def db = new PgDb([
