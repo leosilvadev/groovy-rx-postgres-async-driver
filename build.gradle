@@ -54,8 +54,8 @@ artifacts { archives javadocJar, sourcesJar }
 
 signing { sign configurations.archives }
 
-username = ossrhUsername ?: System.env.ossrhUsername
-ossrhPassword = ossrhPassword ?: System.env.ossrhPassword
+def username = ossrhUsername ?: System.env.ossrhUsername
+def password = ossrhPassword ?: System.env.ossrhPassword
 
 uploadArchives {
 	repositories {
@@ -63,11 +63,11 @@ uploadArchives {
 			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
 			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-				authentication(userName: username, password: ossrhPassword)
+				authentication(userName: username, password: password)
 			}
 
 			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-				authentication(userName: username, password: ossrhPassword)
+				authentication(userName: username, password: password)
 			}
 
 			pom.project {
