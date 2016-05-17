@@ -57,6 +57,7 @@ def db = new PgDb([
 #### All the following methods return an rxjava Observable
 
 ## Transactional Methods
+The rollback happens if there is any error inside the Observables, but you can trigger it anytime you want if needed
 ```groovy
 db.transaction { PgTransaction tx ->
 	tx.insert(sqlInsert, paramsOne).flatMap({ id ->
