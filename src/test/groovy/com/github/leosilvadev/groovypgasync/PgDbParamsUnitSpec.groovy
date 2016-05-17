@@ -4,10 +4,6 @@ import spock.lang.Specification
 
 class PgDbParamsUnitSpec extends Specification {
 	
-	def setup(){
-		println 'Running PgDbParamsUnitSpec'
-	}
-	
 	def "Should handle named parameters"(){
 		given:
 			def sql = 'INSERT INTO Logs (description, details, type) VALUES (:desc, :details, :type)'

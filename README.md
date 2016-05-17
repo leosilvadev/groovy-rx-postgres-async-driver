@@ -7,7 +7,6 @@ Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">pos
 - Use Date types as you want: java.util.Date, Calendar, LocalDate, LocalDateTime
 
 ## TODO
-- Transactions
 - Tests
 - Any Clue for paging
 - Anything you think is useful :)
@@ -56,6 +55,21 @@ def db = new PgDb([
 ```
 
 #### All the following methods return an rxjava Observable
+
+## Transactional Methods
+```groovy
+db.transaction { PgTransaction tx ->
+	tx.insert(sqlInsert, paramsOne).flatMap({ id ->
+		tx.update(sqlUpdate, paramsTwo)
+	}).flatMap({ id ->
+		tx.delete(sqlDelete, paramsThree)
+	}).flatMap({ id ->
+		tx.commit()
+	})
+}.subscribe()
+```
+
+## Non-Transactional Methods
 
 ### Insert
 ```groovy
