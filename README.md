@@ -67,7 +67,7 @@ db.transaction { PgTransaction tx ->
 	}).flatMap({ id ->
 		tx.commit()
 	})
-}.onError({
+}.onErrorReturn({
 	println 'Transaction was rolled back'
 }).subscribe({
 	println 'Transaction OK'
