@@ -57,6 +57,8 @@ def db = new PgDb([
 #### All the following methods return an rxjava Observable
 
 ## Transactional Methods
+**All the non-transactional methods are available on PgTransaction object**
+
 The rollback happens if there is any error inside the Observables, but you can trigger it anytime you want if needed
 ```groovy
 db.transaction { PgTransaction tx ->
