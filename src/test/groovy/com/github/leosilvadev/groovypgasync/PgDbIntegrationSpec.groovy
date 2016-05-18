@@ -1,7 +1,6 @@
 package com.github.leosilvadev.groovypgasync
 
-import java.time.LocalDate
-import java.time.LocalDateTime;
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 import spock.lang.Shared
@@ -11,6 +10,8 @@ import spock.util.concurrent.AsyncConditions
 import spock.util.concurrent.BlockingVariables
 
 import com.github.leosilvadev.groovypgasync.exceptions.ResultMapException
+import com.github.leosilvadev.groovypgasync.paging.Page
+import com.github.leosilvadev.groovypgasync.paging.PageRequest
 
 @Stepwise
 class PgDbIntegrationSpec extends Specification {
@@ -94,6 +95,35 @@ class PgDbIntegrationSpec extends Specification {
 			
 		and:
 			def log = vars.logs.first()
+			log.id > 0
+			log.type == 'DEBUG'
+			log.description == 'any description'
+			log.details == 'updated details'
+	}
+	
+	def "Should find all Logs from paging one"(){
+		def vars = new BlockingVariables(100, TimeUnit.SECONDS)
+		given:
+			def sql = 'SELECT * FROM Logs ORDER BY id DESC'
+			
+		when:
+			def obs = db.find(sql, [id:Long, type:String, description:String, details:String], new PageRequest(1, 1))
+			
+		and:
+			obs
+			.onErrorReturn({ it.printStackTrace() })
+			.subscribe({ vars.page = it })
+			
+		then:
+			Page page = vars.page
+			page.items.size() == 1
+			page.pages == 2
+			page.currentPage == 1
+			page.itemsPerPage == 1
+			page.totalItems == 2
+			
+		and:
+			def log = vars.page.items.first()
 			log.id > 0
 			log.type == 'DEBUG'
 			log.description == 'any description'
