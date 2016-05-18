@@ -4,11 +4,12 @@ import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
 import rx.Observable
 
+import java.util.Map;
+
 import com.github.leosilvadev.groovypgasync.tx.PgTransaction
 import com.github.pgasync.ConnectionPoolBuilder
 import com.github.pgasync.Db
 import com.github.pgasync.Transaction
-import com.github.pgasync.impl.PgResultSet
 
 @CompileStatic
 @TypeChecked
@@ -28,44 +29,33 @@ class PgDb {
 	}
 
 	Observable find(String sql, Map objectTemplate, Map mapParams = null) {
-		execute(sql, mapParams).map(PgDbResultMapper.mapMany(objectTemplate))
+		new PgOperation(db).find(sql, objectTemplate, mapParams)
 	}
 	
 	Observable findOne(String sql, Map objectTemplate, Map mapParams = null) {
-		execute(sql, mapParams).map(PgDbResultMapper.mapOne(objectTemplate))
+		new PgOperation(db).findOne(sql, objectTemplate, mapParams)
 	}
 	
 	Observable insert(String sql, Map mapParams, Boolean mustReturnId = true) {
-		execute(sqlReturnId(sql, mustReturnId), mapParams)
-			.map({ PgResultSet selectResult ->
-				def row = selectResult.row(0)
-				row.getLong(0)
-			})
+		new PgOperation(db).insert(sql, mapParams, mustReturnId)
 	}
 	
 	Observable update(String namedSql, Map mapParams = [:]) {
-		execute(namedSql, mapParams).map({ PgResultSet rs -> rs.updatedRows() })
+		new PgOperation(db).update(namedSql, mapParams)
 	}
 	
 	Observable delete(String namedSql, Map mapParams = [:]) {
-		execute(namedSql, mapParams).map({ PgResultSet rs -> rs.updatedRows() })
+		new PgOperation(db).delete(namedSql, mapParams)
+	}
+	
+	Observable execute(String namedSql, Map mapParams = [:]){
+		new PgOperation(db).execute(namedSql, mapParams)
 	}
 	
 	Observable transaction(Closure function){
 		db.begin().flatMap({ Transaction tx ->
 			function(new PgTransaction(tx))
 		})
-	}
-	
-	Observable execute(String namedSql, Map mapParams = [:]) {
-		Tuple2<String, List> tuple = PgDbParams.namedParameters(namedSql, mapParams)
-		def sql = tuple.first
-		def params = PgDbTypes.prepareAttributes(tuple.second ?: [])
-		db.querySet(sql, params.toArray())
-	}
-	
-	String sqlReturnId(String sql, Boolean mustReturnId){
-		mustReturnId ? (sql + ' RETURNING ID ') : sql
 	}
 	
 }
