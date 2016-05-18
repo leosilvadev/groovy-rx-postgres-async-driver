@@ -8,7 +8,6 @@ Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">pos
 
 ## TODO
 - Tests
-- Any Clue for paging
 - Anything you think is useful :)
 - Jsonb support
 
