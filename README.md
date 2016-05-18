@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.github.leosilvadev:groovy-postgres-async-driver:0.0.3-SNAPSHOT'
+	compile 'com.github.leosilvadev:groovy-postgres-async-driver:0.0.5-SNAPSHOT'
 }
 ```
 
@@ -38,7 +38,7 @@ dependencies {
 <dependency>
   <groupId>com.github.leosilvadev</groupId>
   <artifactId>groovy-postgres-async-driver</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.5-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -102,6 +102,17 @@ db.delete(sql, params).subscribe({ numOfDeleted -> println numOfDeleted })
 def sql = 'SELECT * FROM Users'
 def template = [id:Long, login:String]
 db.find(sql, template).subscribe({ users -> println users })
+```
+
+### Find - Paging
+```groovy
+def sql = 'SELECT * FROM Users WHERE login = :login ORDER BY UserID'
+def template = [id:Long, login:String]
+def params = [login:'any']
+def page = 1
+def itemsPerPage = 10
+def paging = new PageRequest(page, itemsPerPage)
+db.find(sql, template, params, paging).subscribe({ Page page -> println page.items })
 ```
 
 ### Find One
