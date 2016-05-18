@@ -3,7 +3,10 @@ package com.github.leosilvadev.groovypgasync.tx
 import rx.Observable
 import rx.Subscriber
 
+import java.util.Map;
+
 import com.github.leosilvadev.groovypgasync.PgOperation
+import com.github.leosilvadev.groovypgasync.paging.PageRequest;
 import com.github.pgasync.Transaction
 
 class PgTransaction {
@@ -40,6 +43,10 @@ class PgTransaction {
 	
 	Observable find(String sql, Map objectTemplate, Map mapParams = null) {
 		new PgOperation(transaction).find(sql, objectTemplate, mapParams)
+	}
+	
+	Observable find(String sql, Map objectTemplate, Map mapParams = null, PageRequest request) {
+		new PgOperation(transaction).find(sql, objectTemplate, mapParams, request)
 	}
 	
 	Observable findOne(String sql, Map objectTemplate, Map mapParams = null) {

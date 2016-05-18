@@ -4,8 +4,7 @@ import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
 import rx.Observable
 
-import java.util.Map;
-
+import com.github.leosilvadev.groovypgasync.paging.PageRequest
 import com.github.leosilvadev.groovypgasync.tx.PgTransaction
 import com.github.pgasync.ConnectionPoolBuilder
 import com.github.pgasync.Db
@@ -30,6 +29,10 @@ class PgDb {
 
 	Observable find(String sql, Map objectTemplate, Map mapParams = null) {
 		new PgOperation(db).find(sql, objectTemplate, mapParams)
+	}
+	
+	Observable find(String sql, Map objectTemplate, Map mapParams = null, PageRequest request) {
+		new PgOperation(db).find(sql, objectTemplate, mapParams, request)
 	}
 	
 	Observable findOne(String sql, Map objectTemplate, Map mapParams = null) {
