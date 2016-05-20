@@ -1,4 +1,6 @@
-# groovy-rx-postgres-async-driver [![Build Status](https://travis-ci.org/leosilvadev/groovy-rx-postgres-async-driver.svg?branch=master)](https://travis-ci.org/leosilvadev/groovy-rx-postgres-async-driver) [![Coverage Status](https://coveralls.io/repos/github/leosilvadev/groovy-rx-postgres-async-driver/badge.svg?branch=master)](https://coveralls.io/github/leosilvadev/groovy-rx-postgres-async-driver?branch=master)
+# groovy-rx-postgres-async-driver
+[![Released Version](https://img.shields.io/badge/Version-Released-blue.svg)](https://oss.sonatype.org/content/repositories/snapshots/com/github/leosilvadev/groovy-postgres-async-driver/) [![Build Status](https://travis-ci.org/leosilvadev/groovy-rx-postgres-async-driver.svg?branch=master)](https://travis-ci.org/leosilvadev/groovy-rx-postgres-async-driver) [![Coverage Status](https://coveralls.io/repos/github/leosilvadev/groovy-rx-postgres-async-driver/badge.svg?branch=master)](https://coveralls.io/github/leosilvadev/groovy-rx-postgres-async-driver?branch=master)
+
 
 Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">postgres-async-driver<a>, adding utils methods and clue, based only on the driver's rx methods
 
@@ -22,7 +24,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.github.leosilvadev:groovy-postgres-async-driver:0.0.5-SNAPSHOT'
+	compile 'com.github.leosilvadev:groovy-postgres-async-driver:0.0.6-SNAPSHOT'
 }
 ```
 
@@ -37,7 +39,7 @@ dependencies {
 <dependency>
   <groupId>com.github.leosilvadev</groupId>
   <artifactId>groovy-postgres-async-driver</artifactId>
-  <version>0.0.5-SNAPSHOT</version>
+  <version>0.0.6-SNAPSHOT</version>
 </dependency>
 ```
 
