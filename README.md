@@ -7,11 +7,11 @@ Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">pos
 ###### But why?
 - Execute queries with named parameters
 - Use Date types as you want: java.util.Date, Calendar, LocalDate, LocalDateTime
+- Basic Jsonb native support
 
 ## TODO
 - Tests
 - Anything you think is useful :)
-- Jsonb support
 
 ## Usage
 
@@ -81,8 +81,9 @@ db.transaction { PgTransaction tx ->
 
 ### Insert
 ```groovy
-def sql = 'INSERT INTO Users (login, password, dateField, timestampField) VALUES (:login, :password, :date, :timestamp)'
-def params = [login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now()]
+def sql = 'INSERT INTO Users (login, password, dateField, timestampField, jsonbField) VALUES (:login, :password, :date, :timestamp, :jsonbField)'
+def jsonbObject = [any:'Attrvalue', date:new Date(), sub:[name:'UHA']]
+def params = [login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now(), jsonbField:jsonbObject]
 db.insert(sql, params).subscribe({ id -> println id })
 ```
 
@@ -102,7 +103,7 @@ db.delete(sql, params).subscribe({ numOfDeleted -> println numOfDeleted })
 
 ### Find
 ```groovy
-def sql = 'SELECT * FROM Users'
+def sql = "SELECT * FROM Users WHERE jsonbField ->> 'any' = 'Attrvalue'"
 def template = [id:Long, login:String]
 db.find(sql, template).subscribe({ users -> println users })
 ```
