@@ -49,6 +49,7 @@ task sourcesJar(type: Jar) {
 artifacts { archives javadocJar, sourcesJar }
 
 jacocoTestReport {
+	executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 	reports {
 		xml.enabled = true
 		html.enabled = true
