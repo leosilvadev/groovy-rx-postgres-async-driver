@@ -12,7 +12,7 @@ class PgDbUtils {
 		[
 			hostname: env.DB_HOSTNAME ?: 'localhost',
 			port: env.DB_PORT ? new Integer(env.DB_PORT) : 5432 ,
-			database: env.DB_DATABASE ?: 'glogger',
+			database: env.DB_DATABASE ?: 'nosql',
 			username: env.DB_USERNAME ?: 'dev',
 			password: env.DB_PASSWORD ?: 'dev',
 			poolSize: env.DB_POOLSIZE ? new Integer(env.DB_POOLSIZE) : 20

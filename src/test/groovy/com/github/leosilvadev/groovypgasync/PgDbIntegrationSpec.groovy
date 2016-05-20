@@ -31,10 +31,23 @@ class PgDbIntegrationSpec extends Specification {
 	def "Should insert a new Log"(){
 		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
-			def sql = 'INSERT INTO Logs (type, details, description, registration) VALUES (:type, :details, :description, :registration)'
-
+			def sql = '''
+				INSERT INTO Logs (type, details, description, registration, config) 
+					VALUES 
+				(:type, :details, :description, :registration, :config)
+			'''
+			
 		and:
-			def params = [type:'DEBUG', details:'any details', description:'any description', registration:new Date()]
+			def config = [plan:"GOLD", registrationDate:new Date(), events:[[when:new Date(), type:"IHA"], [when:new Date(), type:"UHU"]]]
+			
+		and:
+			def params = [
+				type:'DEBUG',
+				details:'any details',
+				description:'any description',
+				registration:new Date(),
+				config: config
+			]
 			
 		when:
 			def obs = db.insert(sql, params)
@@ -49,10 +62,23 @@ class PgDbIntegrationSpec extends Specification {
 	def "Should insert a new Log again"(){
 		def vars = new BlockingVariables(10, TimeUnit.SECONDS)
 		given:
-			def sql = 'INSERT INTO Logs (type, details, description, registration) VALUES (:type, :details, :description, :registration)'
-		
+			def sql = '''
+				INSERT INTO Logs (type, details, description, registration, config) 
+					VALUES 
+				(:type, :details, :description, :registration, :config)
+			'''
+			
 		and:
-			def params = [type:'DEBUG', details:'any details 2', description:'any description 2', registration:LocalDateTime.now()]
+			def config = [plan:"GOLD", registrationDate:new Date(), events:[[when:new Date(), type:"IHA"], [when:new Date(), type:"UHU"]]]
+			
+		and:
+			def params = [
+				type:'DEBUG', 
+				details:'any details 2', 
+				description:'any description 2', 
+				registration:LocalDateTime.now(),
+				config: config
+			]
 			
 		when:
 			def obs = db.insert(sql, params)
@@ -85,7 +111,7 @@ class PgDbIntegrationSpec extends Specification {
 			def sql = 'SELECT * FROM Logs ORDER BY id'
 			
 		when:
-			def obs = db.find(sql, [id:Long, type:String, description:String, details:String])
+			def obs = db.find(sql, [id:Long, type:String, description:String, details:String, config:Map])
 			
 		and:
 			obs.subscribe({ vars.logs = it })
@@ -99,6 +125,11 @@ class PgDbIntegrationSpec extends Specification {
 			log.type == 'DEBUG'
 			log.description == 'any description'
 			log.details == 'updated details'
+			
+		and:
+			log.config instanceof Map
+			log.config.events.size() == 2
+			log.config.events.first().type == 'IHA'
 	}
 	
 	def "Should find all Logs from paging one"(){
@@ -107,7 +138,7 @@ class PgDbIntegrationSpec extends Specification {
 			def sql = 'SELECT * FROM Logs ORDER BY id DESC'
 			
 		when:
-			def obs = db.find(sql, [id:Long, type:String, description:String, details:String], new PageRequest(1, 1))
+			def obs = db.find(sql, [id:Long, type:String, description:String, details:String, config:Map], new PageRequest(1, 1))
 			
 		and:
 			obs
@@ -128,6 +159,11 @@ class PgDbIntegrationSpec extends Specification {
 			log.type == 'DEBUG'
 			log.description == 'any description'
 			log.details == 'updated details'
+			
+		and:
+			log.config instanceof Map
+			log.config.events.size() == 2
+			log.config.events.first().type == 'IHA'
 	}
 	
 	def "Should find one Log"(){
@@ -136,7 +172,7 @@ class PgDbIntegrationSpec extends Specification {
 			def sql = 'SELECT * FROM Logs WHERE description = :description'
 			
 		when:
-			def obs = db.findOne(sql, [id:Long, type:String, description:String, details:String], [description:'any description 2'])
+			def obs = db.findOne(sql, [id:Long, type:String, description:String, details:String, config:Map], [description:'any description 2'])
 			
 		and:
 			obs.subscribe({ vars.log = it })
@@ -147,6 +183,11 @@ class PgDbIntegrationSpec extends Specification {
 			log.type == 'DEBUG'
 			log.description == 'any description 2'
 			log.details == 'any details 2'
+			
+		and:
+			log.config instanceof Map
+			log.config.events.size() == 2
+			log.config.events.first().type == 'IHA'
 	}
 	
 	def "Should not find one Log when the query returns many"(){

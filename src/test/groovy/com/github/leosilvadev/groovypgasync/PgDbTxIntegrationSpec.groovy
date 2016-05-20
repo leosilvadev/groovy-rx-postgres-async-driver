@@ -28,16 +28,19 @@ class PgDbTxIntegrationSpec extends Specification {
 	def "Should insert three Logs in a Transaction"(){
 		def vars = new BlockingVariables(5, TimeUnit.SECONDS)
 		given:
-			def sql = 'INSERT INTO Logs (type, details, description, registration) VALUES (:type, :details, :description, :registration)'
+			def sql = 'INSERT INTO Logs (type, details, description, registration, config) VALUES (:type, :details, :description, :registration, :config)'
 			
 		and:
-			def paramsOne = [type:'DEBUG', details:'any details 1', description:'any description', registration:new Date()]
+			def config = [plan:"GOLD", registrationDate:new Date(), events:[[when:new Date(), type:"IHA"], [when:new Date(), type:"UHU"]]]
 			
 		and:
-			def paramsTwo = [type:'DEBUG', details:'any details 2', description:'any description', registration:new Date()]
+			def paramsOne = [type:'DEBUG', details:'any details 1', description:'any description', registration:new Date(), config:config]
 			
 		and:
-			def paramsThree = [type:'DEBUG', details:'any details 3', description:'any description', registration:new Date()]
+			def paramsTwo = [type:'DEBUG', details:'any details 2', description:'any description', registration:new Date(), config:config]
+			
+		and:
+			def paramsThree = [type:'DEBUG', details:'any details 3', description:'any description', registration:new Date(), config:config]
 			
 		when:
 			def obs = db.transaction { PgTransaction tx ->
@@ -63,19 +66,22 @@ class PgDbTxIntegrationSpec extends Specification {
 	def "Should rollback a Transaction when got some error"(){
 		def vars = new BlockingVariables(5, TimeUnit.SECONDS)
 		given:
-			def sql = 'INSERT INTO Logs (type, details, description, registration) VALUES (:type, :details, :description, :registration)'
+			def sql = 'INSERT INTO Logs (type, details, description, registration, config) VALUES (:type, :details, :description, :registration, :config)'
+			
+		and:
+			def config = [plan:"GOLD", registrationDate:new Date(), events:[[when:new Date(), type:"IHA"], [when:new Date(), type:"UHU"]]]
 			
 		and:
 			def wrongSql = 'INSERT INTO WRONGLOGTABLE'
 			
 		and:
-			def paramsOne = [type:'DEBUG', details:'any details 1', description:'any description', registration:new Date()]
+			def paramsOne = [type:'DEBUG', details:'any details 1', description:'any description', registration:new Date(), config:config]
 			
 		and:
-			def paramsTwo = [type:'DEBUG', details:'any details 2', description:'any description', registration:new Date()]
+			def paramsTwo = [type:'DEBUG', details:'any details 2', description:'any description', registration:new Date(), config:config]
 			
 		and:
-			def paramsThree = [type:'DEBUG', details:'any details 3', description:'any description', registration:new Date()]
+			def paramsThree = [type:'DEBUG', details:'any details 3', description:'any description', registration:new Date(), config:config]
 			
 		when:
 			def obs = db.transaction { PgTransaction tx ->
@@ -98,16 +104,19 @@ class PgDbTxIntegrationSpec extends Specification {
 	def "Should rollback a Transaction when it is triggered"(){
 		def vars = new BlockingVariables(5, TimeUnit.SECONDS)
 		given:
-			def sql = 'INSERT INTO Logs (type, details, description, registration) VALUES (:type, :details, :description, :registration)'
+			def sql = 'INSERT INTO Logs (type, details, description, registration, config) VALUES (:type, :details, :description, :registration, :config)'
 			
 		and:
-			def paramsOne = [type:'DEBUG', details:'any details 1', description:'any description', registration:new Date()]
+			def config = [plan:"GOLD", registrationDate:new Date(), events:[[when:new Date(), type:"IHA"], [when:new Date(), type:"UHU"]]]
 			
 		and:
-			def paramsTwo = [type:'DEBUG', details:'any details 2', description:'any description', registration:new Date()]
+			def paramsOne = [type:'DEBUG', details:'any details 1', description:'any description', registration:new Date(), config:config]
 			
 		and:
-			def paramsThree = [type:'DEBUG', details:'any details 3', description:'any description', registration:new Date()]
+			def paramsTwo = [type:'DEBUG', details:'any details 2', description:'any description', registration:new Date(), config:config]
+			
+		and:
+			def paramsThree = [type:'DEBUG', details:'any details 3', description:'any description', registration:new Date(), config:config]
 			
 		when:
 			def obs = db.transaction { PgTransaction tx ->

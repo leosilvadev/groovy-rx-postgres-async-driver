@@ -70,7 +70,8 @@ class PgOperation {
 		def sql = tuple.first
 		def params = PgDbTypes.prepareAttributes(tuple.second ?: [])
 		provider.querySet(sql, params.toArray()).onErrorReturn({
-			provider.rollback()
+			it.printStackTrace()
+			if(provider.&rollback) provider.rollback()
 		})
 	}
 	

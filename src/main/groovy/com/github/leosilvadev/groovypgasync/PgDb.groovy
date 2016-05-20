@@ -24,6 +24,7 @@ class PgDb {
 			.username(config.username as String)
 			.password(config.password as String)
 			.poolSize(config.poolSize as Integer)
+			.converters(new JsonbConverter())
 			.build()
 	}
 

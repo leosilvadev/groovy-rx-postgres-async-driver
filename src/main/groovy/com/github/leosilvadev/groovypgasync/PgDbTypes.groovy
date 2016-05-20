@@ -1,12 +1,14 @@
 package com.github.leosilvadev.groovypgasync
 
+import groovy.json.JsonOutput
+
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 class PgDbTypes {
 
-	static def prepareAttribute(attr){
+	static def prepareAttribute(attr, level = 0){
 		switch(attr) {
 			case Date:
 				return new java.sql.Timestamp(attr.getTime())
@@ -21,6 +23,16 @@ class PgDbTypes {
 			case LocalDateTime:
 				Date date = Date.from(attr.atZone(ZoneId.systemDefault()).toInstant())
 				return new java.sql.Timestamp(date.getTime())
+				
+			case List:
+				return attr.collect({ prepareAttribute(it, level + 1) })
+			
+			case Map:
+				def map = [:]
+				attr.each { key, value ->
+					map."$key" = prepareAttribute(value, level + 1)
+				}
+				return (level == 0) ? JsonOutput.toJson(map) : map
 				
 			default:
 				return attr

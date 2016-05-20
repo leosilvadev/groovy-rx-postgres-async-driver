@@ -6,7 +6,7 @@ import groovy.transform.TypeChecked
 import java.sql.Time
 import java.sql.Timestamp
 import java.time.LocalDate
-import java.time.LocalDateTime;
+import java.time.LocalDateTime
 
 import rx.functions.Func1
 
@@ -72,6 +72,7 @@ class PgDbResultMapper {
 			case Long: return row.getLong(column)
 			case Short: return row.getShort(column)	
 			case String: return row.getString(column)
+			case Map: return row.get(column, Map)
 			default: throw new IllegalArgumentException('Unknown type')
 		}
 	}
