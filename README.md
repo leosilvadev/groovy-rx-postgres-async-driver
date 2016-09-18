@@ -79,8 +79,7 @@ db.transaction { PgTransaction tx ->
 
 ## Non-Transactional Methods
 
-### Insert
-Map based
+### Insert - Map based
 ```groovy
 def sql = 'INSERT INTO Users (login, password, dateField, timestampField, jsonbField) VALUES (:login, :password, :date, :timestamp, :jsonbField)'
 def jsonbObject = [any:'Attrvalue', date:new Date(), sub:[name:'UHA']]
@@ -88,7 +87,7 @@ def params = [login:'any', password:'any', date:LocalDate.now(), timestamp:Local
 db.insert(sql, params).subscribe({ id -> println id })
 ```
 
-Class based
+### Insert - Class based
 ```groovy
 class User {
 	Long id
@@ -101,15 +100,22 @@ class User {
 
 def sql = 'INSERT INTO Users (login, password, dateField, timestampField, jsonbField) VALUES (:login, :password, :date, :timestamp, :jsonbField)'
 def jsonbObject = [any:'Attrvalue', date:new Date(), sub:[name:'UHA']]
-def params = new User(login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now(), jsonbField:jsonbObject)
-db.insert(sql, params).subscribe({ id -> println id })
+def user = new User(login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now(), jsonbField:jsonbObject)
+db.insert(sql, user).subscribe({ id -> println id })
 ```
 
-### Update
+### Update - Map based
 ```groovy
 def sql = 'UPDATE Users SET password = :password WHERE login = :login'
 def params = [login:'mylogin', password:'newpass']
 db.update(sql, params).subscribe({ numOfUpdated -> println numOfUpdated })
+```
+
+### Update - Class based
+```groovy
+def sql = 'UPDATE Users SET password = :password WHERE login = :login'
+def user = new User(login:'mylogin', password:'newpass')
+db.update(sql, user).subscribe({ numOfUpdated -> println numOfUpdated })
 ```
 
 ### Delete
@@ -119,14 +125,20 @@ def params = [login:'mylogin']
 db.delete(sql, params).subscribe({ numOfDeleted -> println numOfDeleted })
 ```
 
-### Find
+### Find - Map based
 ```groovy
 def sql = "SELECT * FROM Users WHERE jsonbField ->> 'any' = 'Attrvalue'"
 def template = [id:Long, login:String]
 db.find(sql, template).subscribe({ users -> println users })
 ```
 
-### Find - Paging
+### Find - Class based
+```groovy
+def sql = "SELECT * FROM Users WHERE jsonbField ->> 'any' = 'Attrvalue'"
+db.find(sql, User).subscribe({ users -> println users })
+```
+
+### Find - Paging - Map based
 ```groovy
 def sql = 'SELECT * FROM Users WHERE login = :login ORDER BY UserID'
 def template = [id:Long, login:String]
@@ -137,12 +149,29 @@ def paging = new PageRequest(page, itemsPerPage)
 db.find(sql, template, params, paging).subscribe({ Page page -> println page.items })
 ```
 
-### Find One
+### Find - Paging - Class based
+```groovy
+def sql = 'SELECT * FROM Users WHERE login = :login ORDER BY UserID'
+def params = [login:'any']
+def page = 1
+def itemsPerPage = 10
+def paging = new PageRequest(page, itemsPerPage)
+db.find(sql, User, params, paging).subscribe({ Page page -> println page.items })
+```
+
+### Find One - Map based
 ```groovy
 def sql = 'SELECT * FROM Users WHERE id = :id'
 def template = [id:Long, login:String]
 def params = [id:1]
 db.findOne(sql, template, params).subscribe({ user -> println user })
+```
+
+### Find One - Class based
+```groovy
+def sql = 'SELECT * FROM Users WHERE id = :id'
+def params = [id:1]
+db.findOne(sql, User, params).subscribe({ user -> println user })
 ```
 
 ### Execute

@@ -98,7 +98,7 @@ class PgDbClassesIntegrationSpec extends Specification {
 			def sql = 'UPDATE Logs SET details = :details WHERE description LIKE :description'
 		
 		when:
-			def obs = db.update(sql, [details:'updated details', description:'any description'])
+			def obs = db.update(sql, new Log(details:'updated details', description:'any description'))
 			
 		and:
 			obs.subscribe({ vars.updated = it })
@@ -116,9 +116,7 @@ class PgDbClassesIntegrationSpec extends Specification {
 			def obs = db.find(sql, Log)
 			
 		and:
-			obs.subscribe({ vars.logs = it }, {
-				it.printStackTrace()
-			})
+			obs.subscribe({ vars.logs = it })
 			
 		then:
 			vars.logs.size() == 2
