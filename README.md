@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.github.leosilvadev:groovy-postgres-async-driver:0.0.6-SNAPSHOT'
+	compile 'com.github.leosilvadev:groovy-rx-postgres-async-driver:0.0.7-SNAPSHOT'
 }
 ```
 
@@ -38,8 +38,8 @@ dependencies {
 
 <dependency>
   <groupId>com.github.leosilvadev</groupId>
-  <artifactId>groovy-postgres-async-driver</artifactId>
-  <version>0.0.6-SNAPSHOT</version>
+  <artifactId>groovy-rx-postgres-async-driver</artifactId>
+  <version>0.0.7-SNAPSHOT</version>
 </dependency>
 ```
 
