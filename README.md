@@ -2,12 +2,17 @@
 [![Released Version](https://img.shields.io/badge/Version-Released-blue.svg)](https://oss.sonatype.org/content/repositories/snapshots/com/github/leosilvadev/groovy-postgres-async-driver/) [![Build Status](https://travis-ci.org/leosilvadev/groovy-rx-postgres-async-driver.svg?branch=master)](https://travis-ci.org/leosilvadev/groovy-rx-postgres-async-driver) [![Coverage Status](https://coveralls.io/repos/github/leosilvadev/groovy-rx-postgres-async-driver/badge.svg?branch=master)](https://coveralls.io/github/leosilvadev/groovy-rx-postgres-async-driver?branch=master)
 
 
-Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">postgres-async-driver<a>, adding utils methods and clue, based only on the driver's rx methods
+Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">postgres-async-driver<a>
+- Result mapping based on Templates (Map or Class)
+- Named parameters for queries
+- Jsonb support
 
 ###### But why?
-- Execute queries with named parameters
+- Result mapping based on Templates (Map or Class)
+- Execute queries with Named Parameters
 - Use Date types as you want: java.util.Date, Calendar, LocalDate, LocalDateTime
 - Basic Jsonb native support
+- Pagination support
 
 ## TODO
 - Tests
