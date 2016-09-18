@@ -80,10 +80,28 @@ db.transaction { PgTransaction tx ->
 ## Non-Transactional Methods
 
 ### Insert
+Map based
 ```groovy
 def sql = 'INSERT INTO Users (login, password, dateField, timestampField, jsonbField) VALUES (:login, :password, :date, :timestamp, :jsonbField)'
 def jsonbObject = [any:'Attrvalue', date:new Date(), sub:[name:'UHA']]
 def params = [login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now(), jsonbField:jsonbObject]
+db.insert(sql, params).subscribe({ id -> println id })
+```
+
+Class based
+```groovy
+class User {
+	Long id
+	String login
+	String password
+	LocalDate date
+	LocalDateTime timestamp
+	Map jsonbField
+}
+
+def sql = 'INSERT INTO Users (login, password, dateField, timestampField, jsonbField) VALUES (:login, :password, :date, :timestamp, :jsonbField)'
+def jsonbObject = [any:'Attrvalue', date:new Date(), sub:[name:'UHA']]
+def params = new User(login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now(), jsonbField:jsonbObject)
 db.insert(sql, params).subscribe({ id -> println id })
 ```
 
