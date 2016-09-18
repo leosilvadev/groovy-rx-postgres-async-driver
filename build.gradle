@@ -12,8 +12,8 @@ sourceCompatibility = 1.8
 repositories { mavenCentral() }
 
 dependencies {
-	compile 'org.codehaus.groovy:groovy-all:2.4.6'
-	compile group: 'com.github.alaisi.pgasync', name: 'postgres-async-driver', version: '0.8'
+	compile 'org.codehaus.groovy:groovy-all:2.4.+'
+	compile group: 'com.github.alaisi.pgasync', name: 'postgres-async-driver', version: '0.9'
 
 	testCompile group: 'org.spockframework', name: 'spock-core', version: '1.0-groovy-2.4'
 }
