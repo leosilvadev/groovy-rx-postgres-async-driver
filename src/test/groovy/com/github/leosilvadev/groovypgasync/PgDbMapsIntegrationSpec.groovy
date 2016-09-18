@@ -14,7 +14,7 @@ import com.github.leosilvadev.groovypgasync.paging.Page
 import com.github.leosilvadev.groovypgasync.paging.PageRequest
 
 @Stepwise
-class PgDbIntegrationSpec extends Specification {
+class PgDbMapsIntegrationSpec extends Specification {
 
 	@Shared PgDb db
 	

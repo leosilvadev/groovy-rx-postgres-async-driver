@@ -31,21 +31,41 @@ class PgDb {
 	Observable find(String sql, Map objectTemplate, Map mapParams = null) {
 		new PgOperation(db).find(sql, objectTemplate, mapParams)
 	}
+
+	Observable find(String sql, Class<?> classTemplate, Map mapParams = null) {
+		new PgOperation(db).find(sql, templateOf(classTemplate), mapParams)
+	}
 	
 	Observable find(String sql, Map objectTemplate, Map mapParams = null, PageRequest request) {
 		new PgOperation(db).find(sql, objectTemplate, mapParams, request)
+	}
+	
+	Observable find(String sql, Class<?> classTemplate, Map mapParams = null, PageRequest request) {
+		new PgOperation(db).find(sql, templateOf(classTemplate), mapParams, request)
 	}
 	
 	Observable findOne(String sql, Map objectTemplate, Map mapParams = null) {
 		new PgOperation(db).findOne(sql, objectTemplate, mapParams)
 	}
 	
+	Observable findOne(String sql, Class<?> classTemplate, Map mapParams = null) {
+		new PgOperation(db).findOne(sql, templateOf(classTemplate), mapParams)
+	}
+	
 	Observable insert(String sql, Map mapParams, Boolean mustReturnId = true) {
 		new PgOperation(db).insert(sql, mapParams, mustReturnId)
 	}
 	
+	Observable insert(String sql, Object object, Boolean mustReturnId = true) {
+		new PgOperation(db).insert(sql, object.properties, mustReturnId)
+	}
+	
 	Observable update(String namedSql, Map mapParams = [:]) {
 		new PgOperation(db).update(namedSql, mapParams)
+	}
+	
+	Observable update(String namedSql, Object object) {
+		new PgOperation(db).update(namedSql, object.properties)
 	}
 	
 	Observable delete(String namedSql, Map mapParams = [:]) {
@@ -60,6 +80,10 @@ class PgDb {
 		db.begin().flatMap({ Transaction tx ->
 			function(new PgTransaction(tx))
 		})
+	}
+	
+	private Map templateOf(Class<?> clazz) {
+		clazz.metaClass.properties.findAll({ it.name != 'class' }).collectEntries { [it.name, it.type] }
 	}
 	
 }
