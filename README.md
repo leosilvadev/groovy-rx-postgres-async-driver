@@ -3,9 +3,6 @@
 
 
 Groovy wrapper for <a href="https://github.com/alaisi/postgres-async-driver">postgres-async-driver<a>
-- Result mapping based on Templates (Map or Class)
-- Named parameters for queries
-- Jsonb support
 
 ###### But why?
 - Result mapping based on Templates (Map or Class)
