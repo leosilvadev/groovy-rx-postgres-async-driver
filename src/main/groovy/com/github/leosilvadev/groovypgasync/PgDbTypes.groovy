@@ -10,6 +10,9 @@ class PgDbTypes {
 
 	static def prepareAttribute(attr, level = 0){
 		switch(attr) {
+			case { it?.class?.enum }:
+				return attr.toString()
+
 			case Date:
 				return new java.sql.Timestamp(attr.getTime())
 				

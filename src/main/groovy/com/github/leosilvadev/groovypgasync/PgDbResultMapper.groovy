@@ -54,6 +54,7 @@ class PgDbResultMapper {
 	
 	static def mapType(String column, Class type, Row row){
 		switch(type) {
+			case null: return null
 			case BigDecimal: return row.getBigDecimal(column)
 			case BigInteger: return row.getBigInteger(column)
 			case Boolean: return row.getBoolean(column)
@@ -71,7 +72,7 @@ class PgDbResultMapper {
 			case Short: return row.getShort(column)	
 			case String: return row.getString(column)
 			case Map: return row.get(column, Map)
-			default: throw new IllegalArgumentException('Unknown type')
+			default: return row.getString(column)
 		}
 	}
 	
