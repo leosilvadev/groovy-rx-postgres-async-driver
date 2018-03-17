@@ -2,8 +2,10 @@
 .classpath
 .project
 .settings/
+.idea/
 build/
 bin/
+*.iml
 
 # Ignore Gradle GUI config
 gradle-app.setting
