@@ -31,7 +31,7 @@ class PgDbTxIntegrationSpec extends Specification {
   def "Should insert three Logs in a Transaction"() {
     def vars = new BlockingVariables(5, TimeUnit.SECONDS)
     given:
-    def sql = 'INSERT INTO Logs (type, details, description, registration, config) VALUES (:type, :details, :description, :registration, :config)'
+    def sql = 'INSERT INTO Logs (type, details, description, registration, config, status) VALUES (:type, :details, :description, :registration, :config, :status)'
 
     and:
     def config = [plan: "GOLD", registrationDate: new Date(), events: [[when: new Date(), type: "IHA"], [when: new Date(), type: "UHU"]]]
@@ -78,7 +78,7 @@ class PgDbTxIntegrationSpec extends Specification {
   def "Should rollback a Transaction when got some error"() {
     def vars = new BlockingVariables(5, TimeUnit.SECONDS)
     given:
-    def sql = 'INSERT INTO Logs (type, details, description, registration, config) VALUES (:type, :details, :description, :registration, :config)'
+    def sql = 'INSERT INTO Logs (type, details, description, registration, config, status) VALUES (:type, :details, :description, :registration, :config, :status)'
 
     and:
     def config = [plan: "GOLD", registrationDate: new Date(), events: [[when: new Date(), type: "IHA"], [when: new Date(), type: "UHU"]]]
@@ -116,7 +116,7 @@ class PgDbTxIntegrationSpec extends Specification {
   def "Should rollback a Transaction when it is triggered"() {
     def vars = new BlockingVariables(5, TimeUnit.SECONDS)
     given:
-    def sql = 'INSERT INTO Logs (type, details, description, registration, config) VALUES (:type, :details, :description, :registration, :config)'
+    def sql = 'INSERT INTO Logs (type, details, description, registration, config, status) VALUES (:type, :details, :description, :registration, :config, :status)'
 
     and:
     def config = [plan: "GOLD", registrationDate: new Date(), events: [[when: new Date(), type: "IHA"], [when: new Date(), type: "UHU"]]]

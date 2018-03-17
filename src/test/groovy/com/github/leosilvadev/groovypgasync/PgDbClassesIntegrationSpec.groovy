@@ -34,9 +34,9 @@ class PgDbClassesIntegrationSpec extends Specification {
     def vars = new BlockingVariables(10, TimeUnit.SECONDS)
     given:
     def sql = '''
-				INSERT INTO Logs (type, details, description, registration, config) 
+				INSERT INTO Logs (type, details, description, registration, config, status) 
 					VALUES 
-				(:type, :details, :description, :registration, :config)
+				(:type, :details, :description, :registration, :config, :status)
 			'''
 
     and:
@@ -48,7 +48,8 @@ class PgDbClassesIntegrationSpec extends Specification {
       details: 'any details',
       description: 'any description',
       registration: LocalDateTime.now(),
-      config: config
+      config: config,
+      status: Log.Status.ACTIVE
     )
 
     when:
@@ -65,9 +66,9 @@ class PgDbClassesIntegrationSpec extends Specification {
     def vars = new BlockingVariables(10, TimeUnit.SECONDS)
     given:
     def sql = '''
-				INSERT INTO Logs (type, details, description, registration, config) 
+				INSERT INTO Logs (type, details, description, registration, config, status) 
 					VALUES 
-				(:type, :details, :description, :registration, :config)
+				(:type, :details, :description, :registration, :config, :status)
 			'''
 
     and:
@@ -79,7 +80,8 @@ class PgDbClassesIntegrationSpec extends Specification {
       details: 'any details 2',
       description: 'any description 2',
       registration: LocalDateTime.now(),
-      config: config
+      config: config,
+      status: Log.Status.ACTIVE
     )
 
     when:
@@ -128,6 +130,7 @@ class PgDbClassesIntegrationSpec extends Specification {
     log.type == 'DEBUG'
     log.description == 'any description'
     log.details == 'updated details'
+    log.status == Log.Status.ACTIVE
 
     and:
     log.config instanceof Map

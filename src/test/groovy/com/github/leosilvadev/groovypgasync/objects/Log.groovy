@@ -10,5 +10,10 @@ class Log {
 	String description
 	LocalDateTime registration
 	Map config
-	
+	Status status = Status.ACTIVE
+
+	enum Status {
+		ACTIVE, INACTIVE
+	}
+
 }

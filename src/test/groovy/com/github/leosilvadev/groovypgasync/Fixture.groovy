@@ -6,6 +6,7 @@ class Fixture {
 		CREATE TABLE IF NOT EXISTS Logs (
 			id SERIAL NOT NULL, 
 			type CHARACTER VARYING(50) NOT NULL, 
+			state CHARACTER VARYING(50) NOT NULL, 
 			description TEXT NOT NULL, 
 			details TEXT, 
 			registration TIMESTAMP NOT NULL,
