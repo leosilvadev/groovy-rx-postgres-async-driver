@@ -83,10 +83,10 @@ class PgOperation {
       }
   }
 
-  public <T> Single<Long> insert(final String sql, final T object, final Boolean withId = true) {
-    execute(sqlReturnId(sql, withId), object.properties)
+  public <T> Single<Long> insert(final String sql, final T object) {
+    execute(sqlReturnId(sql), object.properties)
       .map({ final PgResultSet selectResult ->
-        if (!withId || selectResult.size() == 0 ){
+        if (selectResult.size() == 0 ){
           return 0
         }
 
@@ -116,8 +116,8 @@ class PgOperation {
     })
   }
 
-  private static String sqlReturnId(final String sql, final Boolean withId) {
-    withId ? (sql + ' RETURNING ID ') : sql
+  private static String sqlReturnId(final String sql) {
+    sql + ' RETURNING ID '
   }
 
   private static Map templateOf(final Class<?> clazz) {

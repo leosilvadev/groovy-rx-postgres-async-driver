@@ -66,11 +66,11 @@ The rollback happens if there is any error inside the Observables, but you can t
 ```groovy
 def log = new MyObj(name:'whatever', age:30)
 db.transaction().flatMap { final PgTransaction tx ->
-	tx.insert(sqlInsert, log).flatMap({
+	tx.insert(sqlInsert, log).flatMap({ id ->
 		tx.update(sqlUpdate, paramsTwo)
-	}).flatMap({
+	}).flatMap({ numberOfUpdated ->
 		tx.delete(sqlDelete, paramsThree)
-	}).flatMap({
+	}).flatMap({ numberOfDeleted ->
 		tx.commit()
 	})
 }.onErrorReturn({

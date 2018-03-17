@@ -29,7 +29,7 @@ class PgDbTxIntegrationSpec extends Specification {
   }
 
   def "Should insert three Logs in a Transaction"() {
-    def vars = new BlockingVariables(500, TimeUnit.SECONDS)
+    def vars = new BlockingVariables(5, TimeUnit.SECONDS)
     given:
     def sql = 'INSERT INTO Logs (type, details, description, registration, config) VALUES (:type, :details, :description, :registration, :config)'
 

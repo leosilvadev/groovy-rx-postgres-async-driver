@@ -62,7 +62,7 @@ class PgTransaction {
 
   public <T> Single<Long> insert(final String sql,
                                  final T object) {
-    new PgOperation(transaction).insert(sql, object, false)
+    new PgOperation(transaction).insert(sql, object)
   }
 
   public <T> Single<Long> update(final String namedSql,
