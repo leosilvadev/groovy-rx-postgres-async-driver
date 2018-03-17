@@ -86,7 +86,7 @@ class PgOperation {
   public <T> Single<Long> insert(final String sql, final T object, final Boolean withId = true) {
     execute(sqlReturnId(sql, withId), object.properties)
       .map({ final PgResultSet selectResult ->
-        if (selectResult.size() == 0 ){
+        if (!withId || selectResult.size() == 0 ){
           return 0
         }
 

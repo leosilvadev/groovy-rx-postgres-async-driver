@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.github.leosilvadev:groovy-rx-postgres-async-driver:0.0.7-SNAPSHOT'
+	compile 'com.github.leosilvadev:groovy-rx-postgres-async-driver:1.0.0-SNAPSHOT'
 }
 ```
 
@@ -41,7 +41,7 @@ dependencies {
 <dependency>
   <groupId>com.github.leosilvadev</groupId>
   <artifactId>groovy-rx-postgres-async-driver</artifactId>
-  <version>0.0.7-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -64,12 +64,13 @@ def db = new PgDb([
 
 The rollback happens if there is any error inside the Observables, but you can trigger it anytime you want if needed
 ```groovy
-db.transaction { PgTransaction tx ->
-	tx.insert(sqlInsert, paramsOne).flatMap({ id ->
+def log = new MyObj(name:'whatever', age:30)
+db.transaction().flatMap { final PgTransaction tx ->
+	tx.insert(sqlInsert, log).flatMap({
 		tx.update(sqlUpdate, paramsTwo)
-	}).flatMap({ id ->
+	}).flatMap({
 		tx.delete(sqlDelete, paramsThree)
-	}).flatMap({ id ->
+	}).flatMap({
 		tx.commit()
 	})
 }.onErrorReturn({
@@ -81,15 +82,7 @@ db.transaction { PgTransaction tx ->
 
 ## Non-Transactional Methods
 
-### Insert - Map based
-```groovy
-def sql = 'INSERT INTO Users (login, password, dateField, timestampField, jsonbField) VALUES (:login, :password, :date, :timestamp, :jsonbField)'
-def jsonbObject = [any:'Attrvalue', date:new Date(), sub:[name:'UHA']]
-def params = [login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now(), jsonbField:jsonbObject]
-db.insert(sql, params).subscribe({ id -> println id })
-```
-
-### Insert - Class based
+### Insert
 ```groovy
 class User {
 	Long id
@@ -103,81 +96,48 @@ class User {
 def sql = 'INSERT INTO Users (login, password, dateField, timestampField, jsonbField) VALUES (:login, :password, :date, :timestamp, :jsonbField)'
 def jsonbObject = [any:'Attrvalue', date:new Date(), sub:[name:'UHA']]
 def user = new User(login:'any', password:'any', date:LocalDate.now(), timestamp:LocalDateTime.now(), jsonbField:jsonbObject)
-db.insert(sql, user).subscribe({ id -> println id })
+Single<Long> id = db.insert(sql, user)
 ```
 
-### Update - Map based
-```groovy
-def sql = 'UPDATE Users SET password = :password WHERE login = :login'
-def params = [login:'mylogin', password:'newpass']
-db.update(sql, params).subscribe({ numOfUpdated -> println numOfUpdated })
-```
-
-### Update - Class based
+### Update
 ```groovy
 def sql = 'UPDATE Users SET password = :password WHERE login = :login'
 def user = new User(login:'mylogin', password:'newpass')
-db.update(sql, user).subscribe({ numOfUpdated -> println numOfUpdated })
+Single<Long> numberOfUpdated = db.update(sql, user)
 ```
 
 ### Delete
 ```groovy
 def sql = 'DELETE FROM Users WHERE login = :login'
 def params = [login:'mylogin']
-db.delete(sql, params).subscribe({ numOfDeleted -> println numOfDeleted })
+Single<Long> numberOfDeleted = db.delete(sql, params)
 ```
 
-### Find - Map based
+### Find
 ```groovy
 def sql = "SELECT * FROM Users WHERE jsonbField ->> 'any' = 'Attrvalue'"
-def template = [id:Long, login:String]
-db.find(sql, template).subscribe({ users -> println users })
+Observable<User> users = db.find(sql, User)
 ```
 
-### Find - Class based
-```groovy
-def sql = "SELECT * FROM Users WHERE jsonbField ->> 'any' = 'Attrvalue'"
-db.find(sql, User).subscribe({ users -> println users })
-```
-
-### Find - Paging - Map based
-```groovy
-def sql = 'SELECT * FROM Users WHERE login = :login ORDER BY UserID'
-def template = [id:Long, login:String]
-def params = [login:'any']
-def page = 1
-def itemsPerPage = 10
-def paging = new PageRequest(page, itemsPerPage)
-db.find(sql, template, params, paging).subscribe({ Page page -> println page.items })
-```
-
-### Find - Paging - Class based
+### Find - Paging
 ```groovy
 def sql = 'SELECT * FROM Users WHERE login = :login ORDER BY UserID'
 def params = [login:'any']
 def page = 1
 def itemsPerPage = 10
 def paging = new PageRequest(page, itemsPerPage)
-db.find(sql, User, params, paging).subscribe({ Page page -> println page.items })
+Single<Page<User>> usersPage = db.find(sql, User, params, paging)
 ```
 
-### Find One - Map based
-```groovy
-def sql = 'SELECT * FROM Users WHERE id = :id'
-def template = [id:Long, login:String]
-def params = [id:1]
-db.findOne(sql, template, params).subscribe({ user -> println user })
-```
-
-### Find One - Class based
+### Find One
 ```groovy
 def sql = 'SELECT * FROM Users WHERE id = :id'
 def params = [id:1]
-db.findOne(sql, User, params).subscribe({ user -> println user })
+Single<User> user = db.findOne(sql, User, params)
 ```
 
 ### Execute
 ```groovy
 def sql = 'DROP TABLE Users'
-db.execute(sql).subscribe({ result -> println result })
+Single<ResultSet> result = db.execute(sql)
 ```
