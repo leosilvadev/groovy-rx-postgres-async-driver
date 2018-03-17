@@ -3,9 +3,9 @@ package com.github.leosilvadev.groovypgasync.paging
 import groovy.transform.Immutable
 
 @Immutable
-class Page {
+class Page<T> {
 	
-	List items
+	List<T> items
 	Long totalItems
 	Long itemsPerPage
 	Long currentPage

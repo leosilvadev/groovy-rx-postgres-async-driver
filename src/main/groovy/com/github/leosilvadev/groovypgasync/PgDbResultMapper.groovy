@@ -1,25 +1,23 @@
 package com.github.leosilvadev.groovypgasync
 
+import com.github.leosilvadev.groovypgasync.exceptions.ResultMapException
+import com.github.pgasync.ResultSet
+import com.github.pgasync.Row
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
+import io.reactivex.functions.Function
 
 import java.sql.Time
 import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-import rx.functions.Func1
-
-import com.github.leosilvadev.groovypgasync.exceptions.ResultMapException
-import com.github.pgasync.ResultSet
-import com.github.pgasync.Row
-
 @CompileStatic
 @TypeChecked
 class PgDbResultMapper {
 	
-	static Func1 mapMany(Map<String, Class> objectTemplate){
-		{ ResultSet result ->
+	static Function<ResultSet, List<Map>> mapMany(final Map<String, Class> objectTemplate) {
+		{ final ResultSet result ->
 			def items = []
 			result.iterator().each { row ->
 				def map = [:]
@@ -33,11 +31,11 @@ class PgDbResultMapper {
 				items << map
 			}
 			items
-		} as Func1
+		} as Function
 	}
 	
-	static Func1 mapOne(Map<String, Class> objectTemplate){
-		{ ResultSet result ->
+	static <T> Function<ResultSet, Map> mapOne(final Map<String, Class<T>> objectTemplate){
+		{ final ResultSet result ->
 			if ( result.size() > 1 ) throw new ResultMapException("Expected only one result but got many. [${result.size()}]")
 			
 			def row = result.iterator().next()
@@ -51,7 +49,7 @@ class PgDbResultMapper {
 				}
 			}
 			map
-		} as Func1
+		} as Function
 	}
 	
 	static def mapType(String column, Class type, Row row){
@@ -93,7 +91,7 @@ class PgDbResultMapper {
 	}
 	
 	static LocalDateTime localDateTimeFrom(String column, Row row) {
-		java.sql.Timestamp date = row.getTimestamp(column)
+		final Timestamp date = row.getTimestamp(column)
 		date.toLocalDateTime()
 	}
 

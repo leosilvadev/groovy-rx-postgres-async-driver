@@ -1,4 +1,4 @@
-package com.github.leosilvadev.groovypgasync.objects
+package com.github.leosilvadev.groovypgasync.useless
 
 import java.time.LocalDateTime
 
