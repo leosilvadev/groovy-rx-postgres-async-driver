@@ -173,7 +173,7 @@ class PgDbClassesIntegrationSpec extends Specification {
   }
 
   def "Should find one Log"() {
-    def vars = new BlockingVariables(100000, TimeUnit.SECONDS)
+    def vars = new BlockingVariables(10, TimeUnit.SECONDS)
     given:
     def sql = 'SELECT * FROM Logs WHERE description = :description AND status IN (:status)'
 
@@ -194,6 +194,21 @@ class PgDbClassesIntegrationSpec extends Specification {
     log.config instanceof Map
     log.config.events.size() == 2
     log.config.events.first().type == 'IHA'
+  }
+
+  def "Should find one Log using BETWEEN"() {
+    def vars = new BlockingVariables(10, TimeUnit.SECONDS)
+    given:
+    def sql = 'SELECT * FROM Logs WHERE registration BETWEEN :registration'
+
+    when:
+    def obs = db.find(sql, Log, [registration: new Tuple2(LocalDateTime.now().minusHours(1), LocalDateTime.now().plusHours(1))])
+
+    and:
+    obs.toList().subscribe({ vars.logs = it } as Consumer)
+
+    then:
+    vars.logs.size() == 2
   }
 
   def "Should not find one Log when the query returns many"() {

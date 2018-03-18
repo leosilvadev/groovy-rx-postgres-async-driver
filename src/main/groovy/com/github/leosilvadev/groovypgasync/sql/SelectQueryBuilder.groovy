@@ -30,9 +30,9 @@ class SelectQueryBuilder {
       builder.append conditions.collect { where ->
         if (where.values) {
           if (where.operation == 'BETWEEN') {
-            if (where.values.size() != null) throw new IllegalArgumentException('Invalid number of arguments for a BETWEEN operation')
-            params.addAll where.values
-            return "$where.field $where.operation ${where.values[0]} AND ${where.values[1]}"
+            if (where.values.size() != 2) throw new IllegalArgumentException('Invalid number of arguments for a BETWEEN operation')
+            params.add new Tuple2(where.values[0], where.values[1])
+            return "$where.field $where.operation :$where.field"
           }
 
           params.addAll where.values

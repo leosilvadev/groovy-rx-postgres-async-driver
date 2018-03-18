@@ -64,4 +64,16 @@ class SelectBuilderUnitSpec extends Specification {
     query.params == [20, 50]
   }
 
+  def 'Build select query with all fields and one less than and one less than or between filters'() {
+    when:
+    def query = QueryBuilder.select(Log)
+      .where('age').lt(20)
+      .where('points').between(10, 50)
+      .build()
+
+    then:
+    query.sql == 'SELECT * FROM Log WHERE age < :age AND points BETWEEN :points'
+    query.params == [20, [10, 50]]
+  }
+
 }
