@@ -1,8 +1,11 @@
 package com.github.leosilvadev.groovypgasync.objects
 
+import com.github.leosilvadev.groovypgasync.sql.annotations.Table
+
 import java.time.LocalDateTime
 
-class Log {
+@Table("Logs")
+class LogWithAnnotation {
 	
 	Long id
 	String type
