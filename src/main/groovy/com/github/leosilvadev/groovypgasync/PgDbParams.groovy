@@ -11,13 +11,25 @@ class PgDbParams {
 		if ( parameters ) {
 			def neededParams = sql.findAll(/:\w+/)
 			def orderedParameters = []
-			
-			neededParams.eachWithIndex { param, index ->
-				sql = sql.replace(param, "\$${index+1}")
+			def index = 0
+
+			neededParams.each { param ->
 				def paramName = param.substring(1)
 				def paramValue = parameters[paramName]
-				
-				orderedParameters << paramValue
+
+				if (paramValue instanceof List) {
+					sql = sql.replace(param, paramValue.collect {
+						index++
+						"\$${index}"
+					}.join(', '))
+					orderedParameters.addAll paramValue
+
+				} else {
+					sql = sql.replace(param, "\$${index+1}")
+					index++
+					orderedParameters << paramValue
+				}
+
 			}
 			
 			new Tuple2(sql, orderedParameters)

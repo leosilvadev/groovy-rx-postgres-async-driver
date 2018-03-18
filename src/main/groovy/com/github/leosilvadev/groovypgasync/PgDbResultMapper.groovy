@@ -36,7 +36,8 @@ class PgDbResultMapper {
 	
 	static <T> Function<ResultSet, Map> mapOne(final Map<String, Class<T>> objectTemplate){
 		{ final ResultSet result ->
-			if ( result.size() > 1 ) throw new ResultMapException("Expected only one result but got many. [${result.size()}]")
+			if (result.size() == 0) return [:]
+			if (result.size() > 1) throw new ResultMapException("Expected only one result but got ${result.size()}")
 			
 			def row = result.iterator().next()
 			def map = [:]

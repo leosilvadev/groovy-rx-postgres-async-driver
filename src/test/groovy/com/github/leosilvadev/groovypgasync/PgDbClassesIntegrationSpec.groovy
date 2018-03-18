@@ -139,7 +139,7 @@ class PgDbClassesIntegrationSpec extends Specification {
   }
 
   def "Should find all Logs from paging one"() {
-    def vars = new BlockingVariables(100, TimeUnit.SECONDS)
+    def vars = new BlockingVariables(10, TimeUnit.SECONDS)
     given:
     def sql = 'SELECT * FROM Logs ORDER BY id DESC'
 
@@ -173,12 +173,12 @@ class PgDbClassesIntegrationSpec extends Specification {
   }
 
   def "Should find one Log"() {
-    def vars = new BlockingVariables(10, TimeUnit.SECONDS)
+    def vars = new BlockingVariables(100000, TimeUnit.SECONDS)
     given:
-    def sql = 'SELECT * FROM Logs WHERE description = :description'
+    def sql = 'SELECT * FROM Logs WHERE description = :description AND status IN (:status)'
 
     when:
-    def obs = db.findOne(sql, Log, [description: 'any description 2'])
+    def obs = db.findOne(sql, Log, [description: 'any description 2', status: [Log.Status.ACTIVE, Log.Status.INACTIVE]])
 
     and:
     obs.subscribe({ vars.log = it } as Consumer)
